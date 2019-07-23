@@ -1,0 +1,20 @@
+.song-result {
+    margin: 25px auto;
+    width: 30%;
+    border: 1px solid black;
+}
+
+.song-info {
+    margin: 10px 0;
+}
+
+.chord-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style-type: none;
+}
+
+.chord {
+    margin: 10px;
+}
