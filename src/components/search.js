@@ -7,7 +7,8 @@ class Search extends Component {
     super(props);
     this.state = {
       searchtext: "",
-      searchresults: []
+      searchresults: [],
+      searching: false
     };
   }
 
@@ -23,13 +24,14 @@ class Search extends Component {
         "Guitarparty-Api-Key": process.env.REACT_APP_GUITARPARTY_API_KEY
       }
     };
+    this.setState({ searching: true });
     axios
       .get(
         `http://api.guitarparty.com/v2/songs/?query=${this.state.searchtext}`,
         api_key
       )
       .then(res => {
-        this.setState({ searchresults: res.data.objects });
+        this.setState({ searchresults: res.data.objects, searching: false });
         console.log(this.state.searchresults);
       })
       .catch(err => console.log(err));
@@ -39,7 +41,7 @@ class Search extends Component {
     return (
       <div>
         <form onSubmit={this.searchSubmit}>
-          <h5>Search:</h5>
+          <h5>Song Search:</h5>
           <input
             type="text"
             name="searchtext"
@@ -50,16 +52,29 @@ class Search extends Component {
         </form>
         <div>
           Search Results
-          {this.state.searchresults.map(song => (
-            <div className="song-result">
-              <p>"{song.title}" By: {song.authors[0].name}</p>
-              <ul className="chord-list">
-                {song.chords.map(chord => (
-                  <li className="chord">{chord.name}</li>
-                ))}
-              </ul>
+          {this.state.searching === true ? (
+            <div className="d-flex justify-content-center align-items-center">
+              <strong>Loading...</strong>
+              <div
+                className="spinner-border ml-auto"
+                role="status"
+                aria-hidden="true"
+              />
             </div>
-          ))}
+          ) : (
+            this.state.searchresults.map(song => (
+              <div className="song-result">
+                <h5 className="song-info">
+                  "{song.title}" By: {song.authors[0].name}
+                </h5>
+                <ul className="chord-list">
+                  {song.chords.map(chord => (
+                    <li className="chord">{chord.name}</li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          )}
         </div>
       </div>
     );
