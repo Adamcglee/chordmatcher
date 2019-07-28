@@ -65,7 +65,14 @@ class Search extends Component {
             this.state.searchresults.map(song => (
               <div className="song-result">
                 <h5 className="song-info">
-                  "{song.title}" By: {song.authors[0].name}
+                  "{song.title}" By:
+                  {song.authors.length === 1
+                    ? song.authors[0].name
+                    : song.authors.map((author, i) => (
+                        <div key={author.uri}>
+                          {i === 0 ? ` ${author.name}, ` : ` ${author.name}`}
+                        </div>
+                      ))}
                 </h5>
                 <ul className="chord-list">
                   {song.chords.map(chord => (
